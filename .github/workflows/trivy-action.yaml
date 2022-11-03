@@ -1,0 +1,30 @@
+name: Dockefile Vulnerabilitiy Scan
+on:
+  workflow_call:
+    inputs:
+      dockerfile-path:
+        type: boolean
+        required: true
+
+jobs:
+  build:
+    name: Image vulnerabilitiy scanner
+    runs-on: ubuntu-latest
+    steps:
+      - id: repo
+        uses: ASzc/change-string-case-action@v4
+        with:
+          string: ${{ github.repository }} 
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build image from Dockerfile
+        run: |
+          docker build -t ${{ steps.repo.outputs.lowercase }} -f ${{ inputs.dockerfile-path }} .
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.0.10
+        with:
+          image-ref: '${{ steps.repo.outputs.lowercase }}:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'

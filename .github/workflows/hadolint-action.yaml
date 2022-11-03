@@ -1,0 +1,21 @@
+name: Dockerfile Linter Scan
+on:
+  workflow_call:
+    inputs:
+      dockerfile-path:
+        type: boolean
+        required: true
+
+jobs:
+  build:
+    name: Image linting scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Pull hadolint image
+        run: |
+          docker pull hadolint/hadolint:2.10.0
+      - name: Run hadolint scanning
+        run: |
+          docker run --rm -i hadolint/hadolint:2.10.0 hadolint - < ${{ inputs.dockerfile-path }}
