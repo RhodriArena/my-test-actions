@@ -15,15 +15,19 @@ jobs:
         uses: ASzc/change-string-case-action@v4
         with:
           string: ${{ github.repository }} 
+      - id: sha
+        uses: ASzc/change-string-case-action@v4
+        with:
+          string: ${{ github.sha }} 
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Build image from Dockerfile
         run: |
-          docker build --no-cache --force-rm -t ${{ steps.repo.outputs.lowercase }} -f ${{ inputs.dockerfile-path }} .
+          docker build --no-cache --force-rm -t ${{ steps.repo.outputs.lowercase }}:${{ steps.sha.outputs.lowercase }} -f ${{ inputs.dockerfile-path }} .
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.0.10
         with:
-          image-ref: '${{ steps.repo.outputs.lowercase }}:latest'
+          image-ref: '${{ steps.repo.outputs.lowercase }}:${{ steps.sha.outputs.lowercase }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
