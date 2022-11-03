@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       dockerfile-path:
-        type: boolean
+        type: string
         required: true
 
 jobs:
