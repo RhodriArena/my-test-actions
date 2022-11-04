@@ -5,6 +5,10 @@ on:
       dockerfile-path:
         type: string
         required: true
+      ecr-tag:
+        type: string
+        required: false
+        default: ${{ github.sha }} 
 
 jobs:
   build:
@@ -20,10 +24,10 @@ jobs:
         with:
           string: ${{ github.sha }} 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3      
       - name: Build image from Dockerfile
         run: |
-          docker build --no-cache --force-rm -t ${{ steps.repo.outputs.lowercase }}:${{ steps.sha.outputs.lowercase }} -f ${{ inputs.dockerfile-path }} .
+          docker build --no-cache --force-rm -t ${{ steps.repo.outputs.lowercase }}:${{ inputs.ecr-tag }} -f ${{ inputs.dockerfile-path }} .
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.0.10
         with:
