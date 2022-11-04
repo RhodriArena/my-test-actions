@@ -1,4 +1,4 @@
-name: Dockefile Vulnerabilitiy Scan
+name: Dockerfile Vulnerabilitiy Scan
 on:
   workflow_call:
     inputs:
@@ -19,10 +19,6 @@ jobs:
         uses: ASzc/change-string-case-action@v4
         with:
           string: ${{ github.repository }} 
-      - id: sha
-        uses: ASzc/change-string-case-action@v4
-        with:
-          string: ${{ github.sha }} 
       - name: Checkout code
         uses: actions/checkout@v3      
       - name: Build image from Dockerfile
@@ -31,7 +27,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.0.10
         with:
-          image-ref: '${{ steps.repo.outputs.lowercase }}:${{ steps.sha.outputs.lowercase }}'
+          image-ref: '${{ steps.repo.outputs.lowercase }}:${{ inputs.ecr-tag }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
