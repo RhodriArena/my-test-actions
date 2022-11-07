@@ -2,7 +2,7 @@ name: Dockerfile Linter Scan
 on:
   workflow_call:
     inputs:
-      dockerfile-path:
+      dockerfile_path:
         type: string
         required: true
       injected_hadolint_flags:
@@ -21,4 +21,4 @@ jobs:
           docker pull hadolint/hadolint:2.10.0
       - name: Run hadolint scanning
         run: |
-          docker run --rm -i hadolint/hadolint:2.10.0 hadolint ${{ inputs.injected_hadolint_flags }} - < ${{ inputs.dockerfile-path }}
+          docker run --rm -i hadolint/hadolint:2.10.0 hadolint ${{ inputs.injected_hadolint_flags }} - < ${{ inputs.dockerfile_path }}
