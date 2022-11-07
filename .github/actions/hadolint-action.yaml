@@ -1,0 +1,22 @@
+name: Dockerfile Linter Scan
+inputs:
+  dockerfile_path:
+    type: string
+    required: true
+  injected_hadolint_flags:
+    type: string
+    required: false
+
+jobs:
+  build:
+    name: Image linting scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Pull hadolint image
+        run: |
+          docker pull hadolint/hadolint:2.10.0
+      - name: Run hadolint scanning
+        run: |
+          docker run --rm -i hadolint/hadolint:2.10.0 hadolint ${{ inputs.injected_hadolint_flags }} - < ${{ inputs.dockerfile_path }}
