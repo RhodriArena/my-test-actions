@@ -5,6 +5,9 @@ on:
       dockerfile-path:
         type: string
         required: true
+      injected_lint_codes:
+        type: string
+        required: false
 
 jobs:
   build:
@@ -18,4 +21,4 @@ jobs:
           docker pull hadolint/hadolint:2.10.0
       - name: Run hadolint scanning
         run: |
-          docker run --rm -i hadolint/hadolint:2.10.0 hadolint - < ${{ inputs.dockerfile-path }}
+          docker run --rm -i hadolint/hadolint:2.10.0 hadolint {{ inputs.injected_lint_codes  }} - < ${{ inputs.dockerfile-path }}          
