@@ -7,8 +7,7 @@ on:
         required: true
       ecr_tag:
         type: string
-        required: false
-        default: ${{ github.sha }} 
+        required: true
 
 jobs:
   build:
